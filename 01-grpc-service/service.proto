@@ -1,6 +1,6 @@
 syntax = "proto3";
 package play;
-option go_package "play";
+option go_package = "play";
 
 message FizzBuzzRequest {
   int32 input = 1;
