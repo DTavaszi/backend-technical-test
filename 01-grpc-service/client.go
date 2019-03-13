@@ -26,5 +26,9 @@ func main() {
 		log.Fatalf("could not greet: %v", err)
 	}
 
-	log.Printf("Greetings: %s", r.Output)
+	log.Printf("FizzBuzz is: %s", r.Output)
+
+	r2, err := c.Stats(ctx, &StatsRequest{Values: []int32{5, 10, 2, 11, 20}})
+
+	log.Printf("Stats is: %v, %v, %v", r2.Min, r2.Max, r2.Median)
 }
