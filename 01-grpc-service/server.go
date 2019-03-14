@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
+	"sort"
 	"strconv"
 
 	"google.golang.org/grpc"
@@ -39,22 +39,26 @@ func (s *Server) FizzBuzz(context context.Context, in *FizzBuzzRequest) (*FizzBu
 func (s *Server) Stats(context context.Context, in *StatsRequest) (*StatsResponse, error) {
 	min := (int32)(0)
 	max := (int32)(0)
-	median := 0.0
+	median := (float64)(0)
 
-	log.Printf("%v", in.Values)
-	for _, num := range in.Values {
-		log.Printf("%v - %v - %v", min, max, num)
-		if num < min {
-			min = num
-		}
-		if num > max {
-			max = num
-		}
+	// Reference https://forum.golangbridge.org/t/how-to-sort-int32/10529/2
+	sort.Slice(in.Values, func(i int, j int) bool {
+		return in.Values[i] < in.Values[j]
+	})
 
-		median += (float64)(num)
+	if len(in.Values) > 0 {
+		min = in.Values[0]
+		max = in.Values[len(in.Values)-1]
+		median = (float64)(0)
+
+		if len(in.Values)%2 == 0 {
+			first := in.Values[(len(in.Values)-1)/2]
+			second := in.Values[(len(in.Values)-1)/2+1]
+			median = ((float64)(first + second)) / 2
+		} else {
+			median = (float64)(in.Values[len(in.Values)/2])
+		}
 	}
-
-	median /= (float64)(len(in.Values))
 
 	return &StatsResponse{Min: (int32)(min), Max: (int32)(max), Median: median}, nil
 }

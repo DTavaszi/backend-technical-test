@@ -28,7 +28,9 @@ func main() {
 
 	log.Printf("FizzBuzz is: %s", r.Output)
 
-	r2, err := c.Stats(ctx, &StatsRequest{Values: []int32{5, 10, 2, 11, 20}})
+	// values := []int32{5, 10, 2, 11, 20}
+	values := []int32{2, 2, 3, 4, 8, 8}
+	r2, err := c.Stats(ctx, &StatsRequest{Values: values})
 
 	log.Printf("Stats is: %v, %v, %v", r2.Min, r2.Max, r2.Median)
 }
