@@ -6,6 +6,7 @@ import (
 	"net"
 	"sort"
 	"strconv"
+	"strings"
 
 	"google.golang.org/grpc"
 )
@@ -64,7 +65,55 @@ func (s *Server) Stats(context context.Context, in *StatsRequest) (*StatsRespons
 }
 
 func (s *Server) Morse(context context.Context, in *CodeInput) (*CodeOutput, error) {
-	return &CodeOutput{}, nil
+	morseTranslator := map[string]string{
+		".-":    "A",
+		"-...":  "B",
+		"-.-.":  "C",
+		"-..":   "D",
+		".":     "E",
+		"..-.":  "F",
+		"--.":   "G",
+		"....":  "H",
+		"..":    "I",
+		".---":  "J",
+		"-.-":   "K",
+		".-..":  "L",
+		"--":    "M",
+		"-.":    "N",
+		"---":   "O",
+		".--.":  "P",
+		"--.-":  "Q",
+		".-.":   "R",
+		"...":   "S",
+		"-":     "T",
+		"..-":   "U",
+		"...-":  "V",
+		".--":   "W",
+		"-..-":  "X",
+		"-.--":  "Y",
+		"--..":  "Z",
+		".----": "1",
+		"..---": "2",
+		"...--": "3",
+		"....-": "4",
+		".....": "5",
+		"-....": "6",
+		"--...": "7",
+		"---..": "8",
+		"----.": "9",
+		"-----": "0",
+	}
+
+	output := ""
+
+	token := " "
+	codes := strings.Split(in.Input, token)
+
+	for _, code := range codes {
+		output += morseTranslator[code]
+	}
+
+	return &CodeOutput{Output: output}, nil
 }
 
 func (s *Server) Josephus(context context.Context, in *JosephusInput) (*JosephusOutput, error) {

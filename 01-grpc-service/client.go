@@ -33,4 +33,8 @@ func main() {
 	r2, err := c.Stats(ctx, &StatsRequest{Values: values})
 
 	log.Printf("Stats is: %v, %v, %v", r2.Min, r2.Max, r2.Median)
+
+	morse := ".... . -.-- .--- ..- -.. ."
+	m, err := c.Morse(ctx, &CodeInput{Input: morse})
+	log.Printf("Morse is: %v", m.Output)
 }
